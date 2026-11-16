@@ -1,0 +1,9 @@
+-r requirements.txt
+# --- fine-tuning (GPU: free Colab T4 works) ---
+torch>=2.2
+transformers>=4.44
+peft>=0.12
+trl>=0.12
+bitsandbytes>=0.43
+accelerate>=0.33
+datasets>=2.20

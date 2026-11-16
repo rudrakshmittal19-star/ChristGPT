@@ -1,0 +1,52 @@
+[
+ {
+  "question": "What is the minimum attendance to write the end semester exam?",
+  "keyword": "85%",
+  "truth": "85% aggregate attendance, plus internal assessment requirements and satisfactory conduct"
+ },
+ {
+  "question": "What attendance is needed for the mid semester exam?",
+  "keyword": "75%",
+  "truth": "75% in each course"
+ },
+ {
+  "question": "What is the CIA repeat fee for UG courses?",
+  "keyword": "3,000",
+  "truth": "10% of annual fee, minimum Rs 3,000 and maximum Rs 10,000 per course"
+ },
+ {
+  "question": "How many courses can I take for CIA repeat at a time?",
+  "keyword": "two",
+  "truth": "At most two courses at a time"
+ },
+ {
+  "question": "When do the odd semester end semester exams start in 2026?",
+  "keyword": "17 October",
+  "truth": "They start on 1 October 2026 (1 to 17 October)"
+ },
+ {
+  "question": "When does the even semester start?",
+  "keyword": "27 October",
+  "truth": "27 October 2026"
+ },
+ {
+  "question": "What is the eligibility for the B.Tech remote internship?",
+  "keyword": "60%",
+  "truth": "At least 60% in every semester up to the sixth, with no repetition or backlog"
+ },
+ {
+  "question": "How many days do I have to file a grievance?",
+  "keyword": "five working days",
+  "truth": "Within five working days of the issue"
+ },
+ {
+  "question": "Who hears appeals against DSGRC decisions?",
+  "keyword": "Ombudsperson",
+  "truth": "The Ombudsperson, within seven working days of the decision"
+ },
+ {
+  "question": "How many chances do I get for a repeat MSE in a 4-year programme?",
+  "keyword": "3 for 4/5",
+  "truth": "3 chances for 4/5-year programmes"
+ }
+]

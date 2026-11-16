@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>CampusGPT · CHRIST University Assistant</title>
+    <link rel="icon" href="logo.png">
+    <style>
+        :root {
+            --bg: #eef7fd;
+            --card: #fff;
+            --ink: #0b1f3a;
+            --mut: #52687f;
+            --line: #d3e6f3;
+            --pri: #0a56b8;
+            --pri2: #e1f2fc;
+            --gold: #14b8e8;
+            --ok: #0f7a56;
+            --okb: #dff5ec;
+            --bad: #b3261e;
+            --badb: #fde8e6;
+            --btxt: #fff;
+            --hd: linear-gradient(115deg, #06265f, #0a5bc4 62%, #12b5e5);
+            --hdc: #06265f;
+            --sh: 0 1px 2px rgba(20, 33, 61, .06), 0 8px 22px rgba(20, 33, 61, .07);
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        @media(prefers-color-scheme:dark) {
+            :root:not([data-theme="light"]) {
+                color-scheme: dark;
+                --bg: #06121f;
+                --card: #0b1e33;
+                --ink: #e6f3fc;
+                --mut: #8fb0c9;
+                --line: #173653;
+                --pri: #5cc8f5;
+                --pri2: #0f2f4c;
+                --gold: #4cd0f2;
+                --ok: #4cd6a0;
+                --okb: #0f3a2c;
+                --bad: #ff8a80;
+                --badb: #431c1a;
+                --btxt: #06121f;
+                --hd: linear-gradient(115deg, #041a42, #0a4a9c);
+                --hdc: #041a42;
+                --sh: none
+            }
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #06121f;
+            --card: #0b1e33;
+            --ink: #e6f3fc;
+            --mut: #8fb0c9;
+            --line: #173653;
+            --pri: #5cc8f5;
+            --pri2: #0f2f4c;
+            --gold: #4cd0f2;
+            --ok: #4cd6a0;
+            --okb: #0f3a2c;
+            --bad: #ff8a80;
+            --badb: #431c1a;
+            --btxt: #06121f;
+            --hd: linear-gradient(115deg, #041a42, #0a4a9c);
+            --hdc: #041a42;
+            --sh: none
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font: 15px/1.6 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0 0 auto;
+            height: env(safe-area-inset-top, 0px);
+            background: var(--hdc);
+            z-index: 10
+        }
+
+        a {
+            color: var(--pri)
+        }
+
+        header {
+            position: sticky;
+            top: env(safe-area-inset-top, 0px);
+            z-index: 9;
+            background: var(--hd);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 22px;
+            flex-wrap: wrap;
+            border-bottom: 3px solid var(--gold);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .18)
+        }
+
+        .logo {
+            background: #fff;
+            border-radius: 12px;
+            padding: 3px 10px
+        }
+
+        .logo img {
+            height: 44px;
+            display: block;
+            max-width: 100%
+        }
+
+        .brand b {
+            font-size: 20px;
+            color: #fff;
+            letter-spacing: .3px
+        }
+
+        .brand small {
+            display: block;
+            color: #ffffffb8;
+            font-size: 12px
+        }
+
+        header .mut {
+            color: #ffffffc8
+        }
+
+        header .btn.o {
+            color: #fff;
+            border-color: #ffffff80
+        }
+
+        header a.btn {
+            background: var(--gold);
+            color: #0b1f3a;
+            font-weight: 600
+        }
+
+        .sp {
+            flex: 1
+        }
+
+        .seg {
+            display: inline-flex;
+            background: var(--pri2);
+            border-radius: 999px;
+            padding: 3px
+        }
+
+        .seg button {
+            border: 0;
+            background: none;
+            color: var(--mut);
+            padding: 7px 16px;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 999px
+        }
+
+        .seg button.on {
+            background: var(--pri);
+            color: var(--btxt)
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--pri);
+            color: var(--btxt);
+            border: 0;
+            border-radius: 10px;
+            padding: 9px 16px;
+            font: inherit;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .btn:hover {
+            filter: brightness(1.1)
+        }
+
+        .btn:disabled {
+            opacity: .5
+        }
+
+        .btn.o {
+            background: none;
+            color: var(--pri);
+            border: 1px solid var(--pri)
+        }
+
+        .wrap {
+            display: grid;
+            grid-template-columns: 230px 1fr;
+            gap: 22px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px 40px
+        }
+
+        nav {
+            position: sticky;
+            top: 100px;
+            align-self: start;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 10px;
+            box-shadow: var(--sh)
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 14px;
+            border-left: 3px solid transparent
+        }
+
+        nav a:hover {
+            background: var(--pri2)
+        }
+
+        nav a.on {
+            background: var(--pri2);
+            color: var(--pri);
+            font-weight: 600;
+            border-left-color: var(--gold)
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            box-shadow: var(--sh)
+        }
+
+        h2 {
+            margin: 0 0 4px;
+            font-size: 21px;
+            color: var(--pri)
+        }
+
+        h3 {
+            margin: 0 0 6px;
+            font-size: 15px
+        }
+
+        .mut {
+            color: var(--mut);
+            font-size: 13px
+        }
+
+        .view {
+            display: none;
+            animation: fi .25s
+        }
+
+        .view.on {
+            display: block
+        }
+
+        @keyframes fi {
+            from {
+                opacity: 0;
+                transform: translateY(6px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: var(--card);
+            color: var(--ink);
+            border-radius: 999px;
+            padding: 7px 14px;
+            font: inherit;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .15s
+        }
+
+        .chip:hover,
+        .chip.on {
+            border-color: var(--pri);
+            background: var(--pri2);
+            color: var(--pri);
+            transform: translateY(-1px)
+        }
+
+        #log {
+            min-height: 320px;
+            max-height: 58vh;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 8px 4px
+        }
+
+        .m {
+            position: relative;
+            max-width: 88%;
+            padding: 12px 15px;
+            border-radius: 16px
+        }
+
+        .m.u {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--pri), #12a8e0);
+            color: var(--btxt);
+            border-bottom-right-radius: 4px
+        }
+
+        .m.b {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-bottom-left-radius: 4px;
+            box-shadow: var(--sh);
+            margin-left: 40px
+        }
+
+        .m.b::before {
+            content: "C";
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--hd);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 13px
+        }
+
+        .dots i {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            margin: 0 2px;
+            border-radius: 50%;
+            background: var(--mut);
+            animation: bl 1s infinite
+        }
+
+        .dots i:nth-child(2) {
+            animation-delay: .15s
+        }
+
+        .dots i:nth-child(3) {
+            animation-delay: .3s
+        }
+
+        @keyframes bl {
+
+            0%,
+            80%,
+            100% {
+                opacity: .25
+            }
+
+            40% {
+                opacity: 1
+            }
+        }
+
+        .src {
+            display: inline-block;
+            background: var(--pri2);
+            color: var(--pri);
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-size: 12px;
+            margin: 8px 6px 0 0;
+            text-decoration: none
+        }
+
+        .ask {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px
+        }
+
+        input,
+        select,
+        textarea {
+            font: inherit;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--card);
+            color: var(--ink);
+            min-width: 0
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid var(--pri);
+            outline-offset: 1px
+        }
+
+        .ask input {
+            flex: 1;
+            border-radius: 999px;
+            padding: 11px 18px
+        }
+
+        .ask .btn {
+            border-radius: 999px;
+            padding: 10px 22px
+        }
+
+        textarea {
+            width: 100%;
+            margin: 8px 0
+        }
+
+        .tbl {
+            overflow-x: auto
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        th {
+            color: var(--pri);
+            background: var(--pri2);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .4px
+        }
+
+        tbody tr:hover {
+            background: var(--pri2)
+        }
+
+        td input {
+            width: 84px
+        }
+
+        td input.s {
+            width: 100%;
+            min-width: 120px
+        }
+
+        .ok,
+        .bad {
+            display: inline-block;
+            padding: 2px 11px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .ok {
+            background: var(--okb);
+            color: var(--ok)
+        }
+
+        .bad {
+            background: var(--badb);
+            color: var(--bad)
+        }
+
+        #le.bad {
+            background: none;
+            padding: 0
+        }
+
+        .ev {
+            display: flex;
+            gap: 12px;
+            padding: 10px 12px;
+            margin: 6px 0;
+            border-radius: 10px;
+            background: var(--bg);
+            border-left: 4px solid var(--line);
+            align-items: center
+        }
+
+        .dt {
+            min-width: 124px;
+            font-weight: 600;
+            font-size: 13px
+        }
+
+        .tag {
+            font-size: 11px;
+            border-radius: 999px;
+            padding: 2px 10px;
+            background: var(--pri2);
+            color: var(--pri);
+            white-space: nowrap
+        }
+
+        .t-exam {
+            border-left-color: #d9534f
+        }
+
+        .t-cia {
+            border-left-color: #e0a100
+        }
+
+        .t-holiday {
+            border-left-color: #12a070
+        }
+
+        .t-class {
+            border-left-color: #12a8e0
+        }
+
+        .t-event {
+            border-left-color: #8e44ad
+        }
+
+        .hero {
+            background: var(--hd);
+            color: #fff;
+            border-radius: 20px;
+            padding: 26px 28px;
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--sh)
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #14b8e877, transparent 70%)
+        }
+
+        .hero h1 {
+            margin: 6px 0;
+            font-size: 27px
+        }
+
+        .hero p {
+            margin: 0 0 16px;
+            color: #ffffffd2;
+            max-width: 560px
+        }
+
+        .tiles,
+        .qa {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px
+        }
+
+        .qa {
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr))
+        }
+
+        .tile,
+        .qa1 {
+            margin: 0
+        }
+
+        .tile b {
+            font-size: 28px;
+            color: var(--pri);
+            display: block
+        }
+
+        .qa1 {
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: .15s
+        }
+
+        .qa1:hover {
+            transform: translateY(-3px);
+            border-color: var(--pri)
+        }
+
+        .ic {
+            font-size: 26px
+        }
+
+        .g2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .pg {
+            font-size: 11px;
+            color: var(--mut)
+        }
+
+        .foot {
+            text-align: center;
+            color: var(--mut);
+            font-size: 12px;
+            padding: 0 16px 24px
+        }
+
+        #login {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            background: var(--hd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px
+        }
+
+        #login.h {
+            display: none
+        }
+
+        .lg {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            border-top: 4px solid var(--gold)
+        }
+
+        @media(max-width:820px) {
+            .wrap {
+                grid-template-columns: 1fr;
+                padding-bottom: 90px
+            }
+
+            nav {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: auto;
+                z-index: 9;
+                flex-direction: row;
+                overflow-x: auto;
+                border-radius: 16px 16px 0 0;
+                padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px))
+            }
+
+            nav a {
+                flex-direction: column;
+                gap: 2px;
+                font-size: 11px;
+                white-space: nowrap;
+                border-left: 0;
+                border-top: 3px solid transparent;
+                padding: 6px 10px
+            }
+
+            nav a.on {
+                border-top-color: var(--gold)
+            }
+
+            .g2 {
+                grid-template-columns: 1fr
+            }
+
+            .m {
+                max-width: 94%
+            }
+
+            header {
+                padding: 8px 12px
+            }
+
+            .brand small {
+                display: none
+            }
+
+            .hero {
+                padding: 20px
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--line);
+            border-radius: 8px
+        }
+
+        h2 {
+            font-size: 22px;
+            letter-spacing: -.2px
+        }
+
+        .card>h2:first-child::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 2px;
+            margin-right: 10px;
+            vertical-align: -3px
+        }
+
+        #who {
+            background: #ffffff1f;
+            padding: 6px 14px;
+            border-radius: 999px;
+            color: #fff !important;
+            font-size: 13px
+        }
+
+        .btn:active {
+            transform: scale(.97)
+        }
+
+        .hb {
+            background: #ffffff1f;
+            border: 0;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 19px;
+            cursor: pointer
+        }
+
+        .hb:hover {
+            background: #ffffff38
+        }
+
+        .hero {
+            background: radial-gradient(circle at 88% 15%, #14b8e855, transparent 42%), var(--hd)
+        }
+
+        .m.b {
+            font-size: 14.5px
+        }
+
+        .ni {
+            font-size: 18px;
+            width: 28px;
+            text-align: center;
+            flex: none
+        }
+
+        .nl {
+            white-space: nowrap;
+            overflow: hidden
+        }
+
+        .mh {
+            font-weight: 700;
+            color: var(--pri);
+            margin: 18px 0 4px;
+            font-size: 12px;
+            letter-spacing: .8px;
+            text-transform: uppercase
+        }
+
+        .mh:first-child {
+            margin-top: 8px
+        }
+
+        #f.ask {
+            position: sticky;
+            bottom: 0;
+            background: var(--card);
+            padding-top: 10px;
+            margin-top: 6px
+        }
+
+        @media(min-width:821px) {
+            :root {
+                --nw: 244px;
+                --hh: 69px
+            }
+
+            .wrap {
+                grid-template-columns: var(--nw) minmax(0, 1fr);
+                gap: 0;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+                transition: grid-template-columns .22s ease
+            }
+
+            .wrap.c {
+                --nw: 70px
+            }
+
+            nav {
+                top: calc(env(safe-area-inset-top, 0px) + var(--hh));
+                height: calc(100vh - var(--hh) - env(safe-area-inset-top, 0px));
+                border-radius: 0;
+                border: 0;
+                border-right: 1px solid var(--line);
+                box-shadow: none;
+                padding: 14px 10px;
+                overflow: hidden auto;
+                gap: 4px
+            }
+
+            main {
+                padding: 26px 30px 40px;
+                max-width: 1140px;
+                width: 100%;
+                margin: 0 auto
+            }
+
+            .wrap.c .nl {
+                display: none
+            }
+
+            .wrap.c nav a {
+                justify-content: center;
+                padding: 11px 0;
+                gap: 0;
+                border-left-color: transparent
+            }
+
+            #log {
+                max-height: calc(100vh - 380px)
+            }
+        }
+
+        @media(max-width:820px) {
+            .wrap {
+                grid-template-columns: minmax(0, 1fr)
+            }
+
+            main {
+                min-width: 0;
+                width: 100%
+            }
+
+            #hb {
+                display: none
+            }
+        }
+
+        .logo {
+            background: none !important;
+            padding: 0 !important;
+            border: 0 !important
+        }
+
+        .logo img {
+            height: 48px
+        }
+
+        .lg .logo {
+            background: var(--hd) !important;
+            padding: 14px 22px !important;
+            border-radius: 14px
+        }
+
+        .m.b {
+            font-size: 14.5px
+        }
+
+        .ev.t-class,
+        .ev.t-event {
+            border-left-color: var(--gold)
+        }
+
+        .pulse {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--pri2);
+            border-left: 4px solid var(--gold);
+            margin: 10px 0 14px
+        }
+
+        .pulse strong {
+            color: var(--pri)
+        }
+
+        .evcard {
+            border-bottom: 1px solid var(--line);
+            padding: 14px 2px;
+            display: grid;
+            grid-template-columns: minmax(108px, 150px) minmax(0, 1fr) auto;
+            gap: 8px 14px;
+            align-items: start
+        }
+
+        .evcard:last-child {
+            border-bottom: 0
+        }
+
+        .evcard .summary,
+        .evcard .source {
+            grid-column: 2 / 4
+        }
+
+        .evcard .summary {
+            margin: 0;
+            color: var(--mut);
+            font-size: 13px
+        }
+
+        .evcard .date {
+            font-weight: 700;
+            color: var(--pri);
+            font-size: 13px
+        }
+
+        .evcard .tag {
+            justify-self: end
+        }
+
+        .evstatus {
+            padding: 10px 2px;
+            color: var(--mut)
+        }
+
+        #historyList,
+        .chat-actions,
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        #historyList {
+            overflow-x: auto;
+            padding: 8px 0
+        }
+
+        .history-item {
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap
+        }
+
+        .copy-answer {
+            font-size: 12px;
+            padding: 3px 9px
+        }
+
+        @media(max-width:600px) {
+            .evcard {
+                grid-template-columns: 1fr auto
+            }
+
+            .evcard .date {
+                grid-column: 1
+            }
+
+            .evcard .tag {
+                grid-column: 2;
+                grid-row: 1
+            }
+
+            .evcard h3,
+            .evcard .summary,
+            .evcard .source {
+                grid-column: 1 / -1
+            }
+
+            .pulse {
+                align-items: flex-start;
+                flex-direction: column
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="login">
+        <div class="card lg">
+            <div class="logo" style="display:inline-block"><img src="logo.png" alt="CHRIST (Deemed to be University)">
+            </div>
+            <h2 style="margin-top:10px">CampusGPT</h2>
+            <div class="mut">Sign in to continue</div>
+            <div class="seg" id="lr" style="margin:14px 0"><button class="on" data-u="student">Student</button><button
+                    data-u="faculty">Faculty</button><button data-u="admin">Admin</button></div>
+            <form id="lf"><input id="lu" placeholder="User ID" autocomplete="username"
+                    style="width:100%;margin-bottom:8px" value="student"><input id="lp" type="password"
+                    placeholder="Password" autocomplete="current-password" style="width:100%;margin-bottom:8px"
+                    value="christ123"><button class="btn" style="width:100%">Sign in</button></form>
+            <div id="le" class="bad" style="margin-top:8px"></div>
+            <div class="mut" style="margin-top:10px">Prototype login. Demo accounts use the password <b>christ123</b>.
+                University SSO is planned for Stage 2.</div>
+        </div>
+    </div>
+    <header>
+        <div class="logo"><img src="logo.png" alt="CHRIST (Deemed to be University)"></div>
+        <div class="brand"><b>CampusGPT</b><small>University Policy &amp; Academic Assistant</small></div>
+        <div class="sp"></div>
+        <button class="hb" id="th" title="Theme">🌓</button><span class="mut" id="who"></span><button class="btn o"
+            id="out">Log out</button><a class="btn" target="_blank" rel="noopener"
+            href="https://kp.christuniversity.in">Open KP ↗</a><a class="btn" target="_blank" rel="noopener"
+            href="https://studentespro.christuniversity.in/auth/realms/Student/protocol/openid-connect/auth?client_id=react-app&amp;redirect_uri=https%3A%2F%2Fcue.christuniversity.in%2F&amp;response_type=code&amp;scope=openid+profile+email&amp;state=b2lkYy1zcGEu89v3N1bqKVnaLLR8hZ1C&amp;code_challenge=hBYF-W-DCJ_-Dc7G2gSP5R1sUIWQLtXYCzbaLflySa0&amp;code_challenge_method=S256&amp;response_mode=fragment">Open
+            eSPRO ↗</a>
+    </header>
+    <div class="wrap">
+        <nav id="nav"></nav>
+        <main>
+            <section class="view" id="v-home">
+                <div class="hero">
+                    <div style="font-size:12px;letter-spacing:1.5px;opacity:.85">CHRIST (DEEMED TO BE UNIVERSITY)</div>
+                    <h1 id="hh">Welcome</h1>
+                    <p id="hp"></p><a class="btn" style="background:var(--gold);color:#06265f;font-weight:600"
+                        href="#assistant">Ask CampusGPT →</a>
+                </div>
+                <div class="pulse">
+                    <div><strong>Campus Pulse</strong>
+                        <div class="mut" id="pulseText">Official CHRIST notices and deadlines, linked to their source.
+                        </div>
+                    </div>
+                    <a class="btn o" href="#events">Browse events</a>
+                </div>
+                <div class="tiles" id="ht"></div>
+                <h3 style="margin:20px 0 10px">Quick actions</h3>
+                <div class="qa" id="hq"></div>
+                <div class="card" style="margin-top:14px">
+                    <h3>Coming up</h3>
+                    <div id="hu" class="evstatus">Loading official events…</div>
+                </div>
+            </section>
+            <section class="view" id="v-assistant">
+                <div class="card">
+                    <div class="chat-actions">
+                        <h2 style="margin-right:auto">Ask CampusGPT</h2><button class="btn o" id="newChat"
+                            title="Start a new chat">＋ New chat</button>
+                    </div>
+                    <div class="mut">CHRIST rules, dates and fees come from official documents with source and page.
+                        Attendance maths is exact code. Anything not found in the documents is declined, not guessed. <b
+                            id="rl"></b></div>
+                    <div id="historyList" aria-label="Saved conversations"></div>
+                    <div class="chips" id="chips"></div>
+                    <div id="log"></div>
+                    <form class="ask" id="f"><input id="q" placeholder="Ask about attendance, CIA, exams, calendar…"
+                            autocomplete="off"><button class="btn">Send ➤</button></form>
+                </div>
+            </section>
+            <section class="view" id="v-studio">
+                <div class="card">
+                    <div class="chat-actions">
+                        <h2 id="sh" style="margin-right:auto">Studio</h2><button class="chip" id="studioSample"
+                            title="Load fictional sample course notes">Load demo notes</button>
+                    </div>
+                    <div class="mut" id="sd"></div>
+                    <div class="mut">Synthetic sample only. No student records are used.</div>
+                    <div class="ask" style="margin-top:10px"><select id="st" style="flex:1"></select></div><textarea
+                        id="si" rows="7" placeholder="Paste notes, a syllabus, a circular or a topic"></textarea><button
+                        class="btn" id="sg">Generate</button>
+                    <div id="so" style="white-space:pre-wrap;margin-top:12px"></div>
+                </div>
+            </section>
+            <section class="view" id="v-faculty">
+                <div class="card">
+                    <div class="chat-actions">
+                        <h2 style="margin-right:auto">Faculty workspace</h2><button class="btn o" id="exportApproved">⇩
+                            Export approved assessments</button>
+                    </div>
+                    <div class="tiles" id="facultyStats"></div>
+                    <h3 style="margin-top:16px">Upcoming CIA &amp; exam windows</h3>
+                    <div id="facultyDeadlines" class="evstatus">Loading academic calendar…</div>
+                </div>
+                <div class="card">
+                    <h3>Draft an assessment</h3>
+                    <div class="mut">Drafts stay private to your account until reviewed. Nothing is exportable until you
+                        approve it.</div>
+                    <div class="g2"><input id="facultyCourse" placeholder="Course or programme"><input id="facultyTitle"
+                            placeholder="Assessment title"></div>
+                    <div class="ask"><select id="facultyTask" style="flex:1"></select></div>
+                    <textarea id="facultySource" rows="6"
+                        placeholder="Paste syllabus topics or course outcomes. Do not include student records."></textarea>
+                    <button class="btn" id="createFacultyDraft">Generate review draft</button><button class="btn o"
+                        id="saveFacultyDraft">Save source as draft</button>
+                    <div id="facultyDraftState" class="mut" role="status"></div>
+                </div>
+                <div class="card">
+                    <h3>Review queue</h3>
+                    <div id="facultyQueue" class="evstatus">Loading your drafts…</div>
+                </div>
+            </section>
+            <section class="view" id="v-attendance">
+                <div class="card">
+                    <h2>Attendance Intelligence</h2>
+                    <div class="mut">Exact calculation, not LLM guesswork. Handbook 2026-27: 75% per course for MSE, 85%
+                        aggregate for ESE.</div>
+                    <div class="chips"><span class="mut" style="align-self:center">Target:</span><select id="tg">
+                            <option value="85">85% (ESE)</option>
+                            <option value="75">75% (MSE)</option>
+                        </select><button class="chip" id="add">+ Add subject</button></div>
+                    <div class="tbl">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Attended</th>
+                                    <th>Held</th>
+                                    <th>Now</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ab"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <section class="view" id="v-class">
+                <div class="card">
+                    <h2>Class Attendance</h2>
+                    <div class="mut">Demo roster, not real student data. Real data must come through authorised
+                        university APIs.</div>
+                    <div class="chips"><span class="mut" style="align-self:center">Target:</span><select id="ct">
+                            <option value="85">85%</option>
+                            <option value="75">75%</option>
+                        </select></div>
+                    <div class="tbl">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Attended</th>
+                                    <th>Held</th>
+                                    <th>Now</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cb"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <section class="view" id="v-calendar">
+                <div class="card">
+                    <h2>Academic Calendar 2026-27</h2>
+                    <div class="mut">From the official CHRIST calendar PDF. Holidays are subject to change per
+                        Government of Karnataka notifications.</div>
+                    <div class="chips" id="cf"></div>
+                    <div id="ce"></div>
+                </div>
+            </section>
+            <section class="view" id="v-deadlines">
+                <div class="card">
+                    <div class="chat-actions">
+                        <h2 style="margin-right:auto">CIA &amp; Mid-Semester deadlines</h2><a class="btn o"
+                            target="_blank" rel="noopener"
+                            href="https://studentespro.christuniversity.in/auth/realms/Student/protocol/openid-connect/auth?client_id=react-app&amp;redirect_uri=https%3A%2F%2Fcue.christuniversity.in%2F&amp;response_type=code&amp;scope=openid+profile+email&amp;state=b2lkYy1zcGEu89v3N1bqKVnaLLR8hZ1C&amp;code_challenge=hBYF-W-DCJ_-Dc7G2gSP5R1sUIWQLtXYCzbaLflySa0&amp;code_challenge_method=S256&amp;response_mode=fragment">Open
+                            eSPRO ↗</a>
+                    </div>
+                    <div class="mut">Dates shown here come from the published 2026–27 academic calendar.
+                        Marks-submission dates are faculty deadlines; check eSPRO or your course teacher for individual
+                        assessment submissions and hall tickets.</div>
+                    <div id="deadlineList" class="evstatus">Loading calendar deadlines…</div>
+                </div>
+                <div class="card">
+                    <div class="chat-actions">
+                        <h3 style="margin-right:auto">Practice sheet</h3><button class="btn" id="downloadPractice">⇩
+                            Download practice sheet</button>
+                    </div>
+                    <div class="mut">Synthetic revision prompts based on published CIA/MSE rules. This is not an
+                        official or historical past question paper.</div>
+                </div>
+                <div class="card">
+                    <h3>Official documents</h3>
+                    <div class="mut">Download the published calendar and university handbooks directly.</div>
+                    <div id="officialDocs" class="chips" role="status">Loading official downloads…</div>
+                </div>
+            </section>
+            <section class="view" id="v-events">
+                <div class="card">
+                    <div class="chat-actions">
+                        <h2 style="margin-right:auto">Events &amp; notices</h2>
+                        <div class="seg" id="eventRange"><button class="on"
+                                data-range="upcoming">Upcoming</button><button data-range="past">Past</button></div>
+                    </div>
+                    <div class="mut">Public CHRIST events, news, examination, admission and placement notices.</div>
+                    <div class="ask"><input id="eventSearch" placeholder="Search events and notices…"
+                            autocomplete="off"></div>
+                    <div class="chips" id="eventCategories"></div>
+                    <div id="eventList" class="evstatus" role="status">Loading events…</div>
+                </div>
+            </section>
+            <section class="view" id="v-docs">
+                <div class="card">
+                    <h2>Ask a document</h2>
+                    <div class="mut">Upload a circular, syllabus or notes (PDF, TXT, MD) and ask about it. The file is
+                        not stored or added to the shared index.</div><input type="file" id="df" accept=".pdf,.txt,.md"
+                        style="margin:10px 0;width:100%">
+                    <div class="ask"><input id="dq" placeholder="Your question about this document"><button class="btn"
+                            id="dg">Ask</button></div>
+                    <div id="do" style="margin-top:12px"></div>
+                </div>
+            </section>
+            <section class="view" id="v-policies">
+                <div class="card">
+                    <h2>Policy Library</h2>
+                    <div class="mut">Every passage the assistant can cite.</div>
+                    <div class="ask"><input id="ps" placeholder="Search passages…"></div>
+                </div>
+                <div id="pl"></div>
+            </section>
+            <section class="view" id="v-sources">
+                <div class="card">
+                    <h2>Document Sources</h2>
+                    <div id="sl"></div>
+                </div>
+                <div class="card">
+                    <h3>Official portals</h3>
+                    <div class="chips"><a class="chip" target="_blank" rel="noopener"
+                            href="https://kp.christuniversity.in">KP (Knowledge Pro)</a><a class="chip" target="_blank"
+                            rel="noopener"
+                            href="https://studentespro.christuniversity.in/auth/realms/Student/protocol/openid-connect/auth?client_id=react-app&amp;redirect_uri=https%3A%2F%2Fcue.christuniversity.in%2F&amp;response_type=code&amp;scope=openid+profile+email&amp;state=b2lkYy1zcGEu89v3N1bqKVnaLLR8hZ1C&amp;code_challenge=hBYF-W-DCJ_-Dc7G2gSP5R1sUIWQLtXYCzbaLflySa0&amp;code_challenge_method=S256&amp;response_mode=fragment">eSPRO</a><a
+                            class="chip" target="_blank" rel="noopener"
+                            href="https://christuniversity.in/examination-notifications">Exam notifications</a><a
+                            class="chip" target="_blank" rel="noopener"
+                            href="https://christuniversity.in/office-of-examinations">Office of Examinations</a><a
+                            class="chip" target="_blank" rel="noopener"
+                            href="https://christuniversity.in/examination/cia-repeat-regulation">CIA repeat
+                            regulation</a><a class="chip" target="_blank" rel="noopener"
+                            href="https://christuniversity.in">christuniversity.in</a></div>
+                </div>
+            </section>
+            <section class="view" id="v-results">
+                <div class="card">
+                    <h2>Evaluation</h2>
+                    <div id="rb"></div>
+                    <div class="tbl">
+                        <table id="rt"></table>
+                    </div>
+                    <div id="rbars" style="margin-top:16px"></div>
+                </div>
+            </section>
+            <section class="view" id="v-admin">
+                <div class="tiles" id="at"></div>
+                <div class="card" style="margin-top:14px">
+                    <h3>Questions to add documents for</h3>
+                    <div id="au" class="mut"></div>
+                </div>
+                <div class="card">
+                    <h3>Campus events refresh</h3>
+                    <div class="admin-actions"><button class="btn" id="refreshEvents">↻ Refresh events &amp;
+                            re-index</button><span id="eventRefreshStatus" class="mut" role="status">Checking refresh
+                            status…</span></div>
+                </div>
+                <div class="card">
+                    <h3>System operations</h3>
+                    <div class="tbl">
+                        <table>
+                            <tbody id="systemRows">
+                                <tr>
+                                    <td>Loading service health…</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Add a PDF to the knowledge base</h3><input type="file" id="uf" accept=".pdf"> <button
+                        class="btn" id="ug">Upload and re-index</button>
+                    <div id="um" class="mut" style="margin-top:8px"></div>
+                    <div id="ud" class="chips"></div>
+                </div>
+                <div class="card">
+                    <h3>Recent chats</h3>
+                    <div class="tbl">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Question</th>
+                                    <th>Result</th>
+                                    <th>Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody id="al"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="chat-actions">
+                        <h3 style="margin-right:auto">Feedback</h3><button class="btn o" id="exportFeedback"
+                            title="Download feedback as CSV">⇩ Export CSV</button>
+                    </div>
+                    <div class="tbl">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User</th>
+                                    <th>Rating</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feedbackRows"></tbody>
+                        </table>
+                    </div>
+                    <div class="mut" id="feedbackState"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        const B = location.protocol === 'file:' ? 'http://localhost:8000' : '';
+        const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+        const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        let T = sessionStorage.getItem('t'), U = JSON.parse(sessionStorage.getItem('u') || 'null'), hist = [], cal = null,
+            currentConversation = null, eventCache = [], feedbackCache = [];
+        async function api(p, o = {}) {
+            const h = { ...(o.headers || {}) }; if (T) h.Authorization = 'Bearer ' + T;
+            if (o.json) { o.body = JSON.stringify(o.json); h['Content-Type'] = 'application/json'; o.method = o.method || 'POST' }
+            const r = await fetch(B + p, { ...o, headers: h }); if (r.status === 401 && T && p !== '/auth/login') { out(); throw new Error('Session expired') }
+            if (!r.ok) { let d = {}; try { d = await r.json() } catch { } throw new Error(d.detail || r.statusText) } return r.json()
+        }
+        const NAV = [['home', '🏠', 'Home', 'sfa'], ['assistant', '💬', 'Assistant', 'sf'], ['deadlines', '⏳', 'CIA & MSE', 'sfa'], ['events', '🗓', 'Events', 'sfa'], ['faculty', '🧑‍🏫', 'Faculty workspace', 'f'], ['studio', '✨', 'Studio', 'sf'], ['attendance', '📊', 'Attendance', 's'], ['class', '👥', 'Class Attendance', 'f'],
+        ['calendar', '📅', 'Calendar', 'sfa'], ['docs', '📄', 'Ask a document', 'sf'], ['policies', '📘', 'Policies', 'sfa'], ['results', '🎯', 'Evaluation', 'fa'], ['sources', '🗂', 'Sources', 'sfa'], ['admin', '🛠', 'Admin', 'a']];
+        const CHIPS = {
+            student: ['What attendance is needed for the end semester exam?', 'I attended 39 of 50 classes and need 85%. How many more must I attend?', 'How do I apply for CIA repeat?', 'When does the next semester reopen?', 'How do I raise a grievance?'],
+            faculty: ['What is the CIA repeat procedure?', 'What attendance is required for ESE and MSE?', 'When is the last working day this semester?', 'What are the internship rules for higher semesters?']
+        };
+        const code = { student: 's', faculty: 'f', admin: 'a' };
+        function show(v) {
+            const ok = NAV.find(n => n[0] === v && n[3].includes(code[U.role])) ? v : NAV.find(n => n[3].includes(code[U.role]))[0];
+            $$('.view').forEach(e => e.classList.toggle('on', e.id === 'v-' + ok)); $$('#nav a').forEach(a => a.classList.toggle('on', a.dataset.v === ok));
+            (LOAD[ok] || (() => { }))().catch(e => toast(e.message))
+        }
+        function toast(m) { const d = document.createElement('div'); d.textContent = m; d.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--hdc);color:#fff;padding:10px 18px;border-radius:999px;z-index:30;font-size:14px'; document.body.appendChild(d); setTimeout(() => d.remove(), 3500) }
+        function start() {
+            $('#login').classList.add('h'); $('#who').textContent = U.name + ' · ' + U.role; $('#out').style.display = '';
+            $('#nav').innerHTML = NAV.filter(n => n[3].includes(code[U.role])).map(n => `<a href="#${n[0]}" data-v="${n[0]}"><span class="ni">${n[1]}</span><span class="nl">${n[2]}</span></a>`).join('');
+            $('#rl').textContent = U.role[0].toUpperCase() + U.role.slice(1) + ' mode';
+            $('#chips').innerHTML = (CHIPS[U.role] || []).map(c => `<button class="chip">${esc(c)}</button>`).join('');
+            if (!$('#log').children.length) bot('Hello ' + esc(U.name) + '. Ask me about attendance, CIA, exams, the academic calendar or any CHRIST regulation. I answer from official documents and show the source.');
+            show(location.hash.slice(1) || 'home')
+        }
+        async function loadConversationList() {
+            const data = await api('/history');
+            $('#historyList').innerHTML = data.conversations.length
+                ? data.conversations.map(c => `<button class="chip history-item" data-conversation="${esc(c.conversation_id)}" title="${esc(c.title || 'Conversation')}">${esc(c.title || 'Conversation')}</button>`).join('')
+                : '<span class="mut">Saved conversations appear here.</span>';
+        }
+        async function openConversation(id) {
+            const data = await api('/history?conversation_id=' + encodeURIComponent(id));
+            currentConversation = id; hist = []; $('#log').innerHTML = '';
+            data.messages.forEach(row => {
+                user(row.question);
+                const answer = bot(fmt(row.answer));
+                let sources = [];
+                try { sources = JSON.parse(row.sources || '[]') } catch { }
+                renderAnswer(answer, row.answer, {
+                    chat_id: row.id, sources, abstained: !!row.abstained,
+                    tool: row.tool, latency_s: row.latency
+                });
+                hist.push({ role: 'user', content: row.question }, { role: 'assistant', content: row.answer });
+            });
+            location.hash = 'assistant';
+        }
+        function out() { sessionStorage.clear(); T = U = null; hist = []; $('#log').innerHTML = ''; $('#login').classList.remove('h'); $('#out').style.display = 'none'; $('#who').textContent = '' }
+        addEventListener('hashchange', () => U && show(location.hash.slice(1)));
+        $('#out').onclick = out; $('#th').onclick = () => { const r = document.documentElement, d = r.dataset.theme === 'dark'; r.dataset.theme = d ? 'light' : 'dark' };
+        $$('#lr button').forEach(b => b.onclick = () => { $$('#lr button').forEach(x => x.classList.toggle('on', x === b)); $('#lu').value = b.dataset.u; $('#lp').value = 'christ123' });
+        $('#lf').onsubmit = async e => {
+            e.preventDefault(); $('#le').textContent = ''; try {
+                const r = await api('/auth/login', { json: { username: $('#lu').value, password: $('#lp').value } });
+                T = r.token; U = { role: r.role, name: r.name }; sessionStorage.setItem('t', T); sessionStorage.setItem('u', JSON.stringify(U)); start()
+            } catch (x) { $('#le').textContent = x.message }
+        };
+        /* chat */
+        function fmt(t) { return esc(t).replace(/\[S(\d+)\]/g, '<sup style="color:var(--pri);font-weight:700">[S$1]</sup>').replace(/\n/g, '<br>') }
+        function bot(h, extra = '') { const d = document.createElement('div'); d.className = 'm b'; d.innerHTML = h + extra; $('#log').appendChild(d); $('#log').scrollTop = 1e9; return d }
+        function user(t) { const d = document.createElement('div'); d.className = 'm u'; d.textContent = t; $('#log').appendChild(d); $('#log').scrollTop = 1e9 }
+        async function ask(q) {
+            if (!q.trim()) return; user(q); $('#q').value = ''; const w = bot('<span class="dots"><i></i><i></i><i></i></span>');
+            try {
+                const response = await fetch(B + '/chat', {
+                    method: 'POST',
+                    headers: { Authorization: 'Bearer ' + T, 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+                    body: JSON.stringify({ message: q, conversation_id: currentConversation })
+                });
+                if (!response.ok) { let detail = response.statusText; try { detail = (await response.json()).detail || detail } catch { } throw new Error(detail) }
+                let buffer = '', answer = '', result = null;
+                const decoder = new TextDecoder();
+                const process = block => {
+                    const event = block.match(/^event: (.+)$/m)?.[1];
+                    const data = block.split('\n').filter(line => line.startsWith('data:')).map(line => line.slice(5).trim()).join('\n');
+                    if (!data) return;
+                    const payload = JSON.parse(data);
+                    if (event === 'token') { answer += payload.text; w.innerHTML = fmt(answer); $('#log').scrollTop = 1e9 }
+                    if (event === 'done') result = payload;
+                    if (event === 'error') throw new Error(payload.detail || 'The answer could not be generated');
+                };
+                const reader = response.body.getReader();
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const blocks = buffer.split('\n\n'); buffer = blocks.pop(); blocks.forEach(process);
+                }
+                buffer += decoder.decode(); if (buffer.trim()) process(buffer);
+                if (!result) throw new Error('The answer stream ended unexpectedly');
+                currentConversation = result.conversation_id;
+                hist.push({ role: 'user', content: q }, { role: 'assistant', content: answer });
+                renderAnswer(w, answer, result);
+                loadConversationList().catch(() => { });
+            }
+            catch (e) { w.innerHTML = '<span class="bad">' + esc(e.message) + '</span>' } $('#log').scrollTop = 1e9
+        }
+        function renderAnswer(node, answer, result) {
+            const src = (result.sources || []).map(s => `<a class="src" target="_blank" rel="noopener" href="${esc(s.source)}">📄 ${esc(s.title || s.source)} · ${esc(s.page)}</a>`).join('');
+            const tag = result.tool ? '<span class="src">Exact calculation</span>' : result.abstained ? '<span class="src">Not found in documents</span>' : '';
+            node.innerHTML = fmt(answer) + '<div>' + tag + src + '</div>' + `<div class="mut" style="margin-top:6px">${Number(result.latency_s || 0).toFixed(1)}s <button class="chip fb" data-c="${result.chat_id}" data-v="1">Helpful</button><button class="chip fb" data-c="${result.chat_id}" data-v="-1">Not helpful</button> <button class="chip copy-answer" title="Copy answer">Copy</button></div>`;
+            node.querySelector('.copy-answer').dataset.answer = answer;
+        }
+        $('#f').onsubmit = e => { e.preventDefault(); ask($('#q').value) };
+        $('#newChat').onclick = () => { currentConversation = crypto.randomUUID(); hist = []; $('#log').innerHTML = ''; bot('New conversation. Ask about CHRIST policies, events or deadlines.'); location.hash = 'assistant' };
+        $('#downloadPractice').onclick = () => {
+            const content = [
+                'CAMPUSGPT | SYNTHETIC CIA / MSE REVISION PRACTICE',
+                'Not an official CHRIST paper. Not a historical PYQ. For revision only.',
+                '',
+                '1. State the minimum course attendance listed for eligibility to sit a Mid-Semester Examination.',
+                '2. Explain how CIA I, CIA II (MSE), and CIA III differ in the published academic rules.',
+                '3. Summarise the approval steps and consequences described for a repeat MSE.',
+                '4. According to the 2026–27 calendar, list the scheduled even-semester MSE window and the CIA/MSE marks-submission dates.',
+                '5. A student has 36 attended classes out of 50. Using the 75% MSE eligibility rule, explain whether the attendance threshold is met.',
+                '',
+                'Verify current dates, course submissions, and hall tickets in eSPRO and with the course teacher.',
+            ].join('\\n');
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' }), link = document.createElement('a');
+            link.href = URL.createObjectURL(blob); link.download = 'campusgpt-synthetic-cia-mse-practice.txt'; link.click(); URL.revokeObjectURL(link.href);
+        };
+        document.addEventListener('click', async e => {
+            const c = e.target.closest('#chips .chip'); if (c) { location.hash = 'assistant'; ask(c.textContent) }
+            const f = e.target.closest('.fb'); if (f) { try { await api('/feedback', { json: { chat_id: +f.dataset.c, rating: +f.dataset.v } }); f.parentNode.querySelectorAll('.fb').forEach(x => x.disabled = true); toast('Thanks for the feedback') } catch (x) { toast(x.message) } }
+            const copy = e.target.closest('.copy-answer'); if (copy) { try { await navigator.clipboard.writeText(copy.dataset.answer || ''); toast('Answer copied') } catch { toast('Clipboard access is unavailable') } }
+            const saved = e.target.closest('[data-conversation]'); if (saved) { try { await openConversation(saved.dataset.conversation) } catch (x) { toast(x.message) } }
+            const review = e.target.closest('[data-review]'); if (review) {
+                review.disabled = true;
+                try { await api(`/faculty/assessments/${review.dataset.item}`, { method: 'PATCH', json: { status: review.dataset.review } }); await LOAD.faculty() }
+                catch (error) { toast(error.message); review.disabled = false }
+            }
+        });
+        /* views */
+        const fmtD = s => new Date(s + 'T00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        const rng = e => e.end && e.end !== e.start ? fmtD(e.start) + ' – ' + fmtD(e.end) : fmtD(e.start);
+        async function getCal() { return cal || (cal = await api('/calendar')) }
+        let selectedEventCategory = '', selectedEventRange = 'upcoming';
+        function drawEvents() {
+            const today = new Date().toISOString().slice(0, 10), term = $('#eventSearch').value.trim().toLowerCase();
+            const rows = eventCache.filter(e => (selectedEventRange === 'upcoming' ? !e.date || e.date >= today : e.date && e.date < today)
+                && (!selectedEventCategory || e.category === selectedEventCategory)
+                && (!term || `${e.title} ${e.summary} ${e.category}`.toLowerCase().includes(term)));
+            $('#eventList').innerHTML = rows.length ? rows.map(e => `<article class="evcard"><div class="date">${e.date ? fmtD(e.date) : 'Date not published'}</div><h3>${esc(e.title)}</h3><span class="tag">${esc(e.category)}</span><p class="summary">${esc(e.summary || '')}</p><a class="source" target="_blank" rel="noopener" href="${esc(e.url)}">Open source page ↗</a></article>`).join('')
+                : '<div class="evstatus">No notices match these filters.</div>';
+        }
+        async function loadEvents() {
+            $('#eventList').textContent = 'Loading public CHRIST notices…';
+            try {
+                eventCache = await api('/events');
+                const categories = [...new Set(eventCache.map(e => e.category))].sort();
+                $('#eventCategories').innerHTML = '<button class="chip on" data-category="">All</button>' + categories.map(c => `<button class="chip" data-category="${esc(c)}">${esc(c)}</button>`).join('');
+                drawEvents();
+            } catch (error) { $('#eventList').innerHTML = `<span class="bad">Events could not be loaded: ${esc(error.message)}</span>` }
+        }
+        $('#eventRange').onclick = event => {
+            const button = event.target.closest('[data-range]'); if (!button) return;
+            selectedEventRange = button.dataset.range;
+            $$('#eventRange button').forEach(item => item.classList.toggle('on', item === button)); drawEvents();
+        };
+        $('#eventCategories').onclick = event => {
+            const button = event.target.closest('[data-category]'); if (!button) return;
+            selectedEventCategory = button.dataset.category;
+            $$('#eventCategories button').forEach(item => item.classList.toggle('on', item === button)); drawEvents();
+        };
+        let eventSearchTimer;
+        $('#eventSearch').oninput = () => { clearTimeout(eventSearchTimer); eventSearchTimer = setTimeout(drawEvents, 150) };
+        function drawFacultyQueue(items) {
+            $('#facultyQueue').innerHTML = items.length ? items.map(item => `<article class="evcard"><div class="date">${new Date(item.updated_at * 1000).toLocaleDateString()}</div><h3>${esc(item.title)} · ${esc(item.course)}</h3><span class="tag">${esc(item.status)}</span><details class="summary"><summary>${esc(item.task)}</summary><p style="white-space:pre-wrap">${esc(item.content)}</p></details>${item.status === 'draft' ? `<div class="source"><button class="chip" data-review="approved" data-item="${item.id}">Approve for export</button><button class="chip" data-review="rejected" data-item="${item.id}">Return draft</button></div>` : ''}</article>`).join('') : '<div class="evstatus">No assessment drafts yet. Create a draft from course outcomes above.</div>';
+        }
+        async function createFacultyDraft(generate) {
+            const course = $('#facultyCourse').value.trim(), title = $('#facultyTitle').value.trim(), text = $('#facultySource').value.trim();
+            if (!course || !title || !text) { $('#facultyDraftState').textContent = 'Enter a course, title, and source material first.'; return }
+            const buttons = [$('#createFacultyDraft'), $('#saveFacultyDraft')]; buttons.forEach(button => button.disabled = true);
+            $('#facultyDraftState').textContent = generate ? 'Generating a private review draft…' : 'Saving source as an offline review scaffold…';
+            try {
+                await api('/faculty/assessments', { json: { course, title, task: $('#facultyTask').value, text, generate } });
+                $('#facultyDraftState').textContent = generate ? 'Draft saved. Review it below before approval.' : 'Source scaffold saved. No questions were generated.';
+                await LOAD.faculty();
+            } catch (error) { $('#facultyDraftState').textContent = error.message }
+            finally { buttons.forEach(button => button.disabled = false) }
+        }
+        $('#createFacultyDraft').onclick = () => createFacultyDraft(true);
+        $('#saveFacultyDraft').onclick = () => createFacultyDraft(false);
+        $('#exportApproved').onclick = async () => {
+            try {
+                const response = await fetch(B + '/faculty/assessments/export', { headers: { Authorization: 'Bearer ' + T } });
+                if (!response.ok) throw new Error('Approved export is unavailable');
+                const blob = await response.blob(), link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'approved-assessments.csv'; link.click(); URL.revokeObjectURL(link.href);
+            } catch (error) { toast(error.message) }
+        };
+        const LOAD = {
+            async assistant() { await loadConversationList() },
+            async deadlines() {
+                try {
+                    const calendar = await getCal(), today = new Date().toISOString().slice(0, 10);
+                    const deadlines = calendar.filter(item => /cia|mid.?semester|mse/i.test(item.title) && (item.end || item.start) >= today);
+                    $('#deadlineList').innerHTML = deadlines.length ? deadlines.map(item => `<div class="evcard"><div class="date">${rng(item)}</div><h3>${esc(item.title)}</h3><span class="tag">${esc(item.source || 'Academic calendar PDF')}</span><div class="source">${item.url ? `<a target="_blank" rel="noopener" href="${esc(item.url)}">Open official notice ↗</a>` : 'Published calendar date'}</div></div>`).join('')
+                        : '<div class="evstatus">No future CIA or Mid-Semester dates are currently listed. Check eSPRO for course-specific updates.</div>';
+                } catch (error) { $('#deadlineList').innerHTML = `<span class="bad">Calendar deadlines could not be loaded: ${esc(error.message)}</span>` }
+                try {
+                    const docs = await api('/public-documents');
+                    $('#officialDocs').innerHTML = docs.length ? docs.map(doc => `<a class="chip" href="${esc(doc.url)}" download>${esc(doc.title)} · Download</a>`).join('')
+                        : '<span class="evstatus">No official PDF downloads are available in this deployment.</span>';
+                } catch (error) { $('#officialDocs').innerHTML = `<span class="bad">Downloads unavailable: ${esc(error.message)}</span>` }
+            },
+            async home() {
+                $('#hh').textContent = 'Welcome, ' + U.name; $('#hp').textContent = U.role === 'faculty' ? 'Draft assessments, check policies and review class attendance in one place.' : U.role === 'admin' ? 'Monitor usage and keep the knowledge base current.' : 'Ask about rules, check your attendance and plan your semester.';
+                const c = await getCal(), today = new Date().toISOString().slice(0, 10), up = c.filter(e => (e.end || e.start) >= today).slice(0, 6);
+                const s = await api('/sources'); $('#ht').innerHTML = [[s.length, 'documents indexed'], [s.reduce((a, x) => a + x.chunks, 0), 'searchable passages'], [c.length, 'calendar events']].map(t => `<div class="card tile"><b>${t[0]}</b><span class="mut">${t[1]}</span></div>`).join('');
+                const Q = [['assistant', '💬', 'Ask the assistant', 'Rules with sources'], ['attendance', '📊', 'Attendance', 'Classes you can miss'], ['calendar', '📅', 'Calendar', 'Exams and holidays'], ['docs', '📄', 'Ask a document', 'Upload a circular']];
+                $('#hq').innerHTML = Q.filter(q => NAV.find(n => n[0] === q[0] && n[3].includes(code[U.role]))).map(q => `<a class="card qa1" href="#${q[0]}"><b>${q[1]} ${q[2]}</b><span class="mut">${q[3]}</span></a>`).join('');
+                $('#pulseText').textContent = up.length ? `${up.length} verified dates and notices are on the calendar. Open each source to confirm details.` : 'No upcoming dates are listed.';
+                $('#hu').innerHTML = up.map(e => `<div class="ev t-${e.type}"><div class="dt">${rng(e)}</div><div>${esc(e.title)}<div class="mut">${esc(e.source || 'Academic calendar PDF')}</div></div>${e.url ? `<a class="tag" target="_blank" rel="noopener" href="${esc(e.url)}">Source ↗</a>` : `<span class="tag">${esc(e.type)}</span>`}</div>`).join('') || '<div class="evstatus">No upcoming dates yet.</div>'
+            },
+            async events() { await loadEvents() },
+            async studio() { const t = await api('/studio/tasks'); $('#sh').textContent = U.role === 'faculty' ? 'Assessment Studio' : 'Study Studio'; $('#sd').textContent = U.role === 'faculty' ? 'AI drafts for you to review. Every draft is labelled as needing faculty approval.' : 'Practice tests, flashcards, notes and study plans from your own material.'; $('#st').innerHTML = t.map(x => `<option>${esc(x)}</option>`).join('') },
+            async faculty() {
+                const [overview, items] = await Promise.all([api('/faculty/dashboard'), api('/faculty/assessments')]);
+                $('#facultyStats').innerHTML = [['drafts', 'Needs review'], ['approved', 'Approved'], ['rejected', 'Returned']].map(([key, label]) => `<div class="card tile"><b>${overview[key]}</b><span class="mut">${label}</span></div>`).join('');
+                $('#facultyTask').innerHTML = overview.tasks.map(task => `<option>${esc(task)}</option>`).join('');
+                $('#facultyDeadlines').innerHTML = overview.deadlines.length ? overview.deadlines.map(item => `<div class="ev"><div class="dt">${rng(item)}</div><div style="flex:1">${esc(item.title)}<div class="mut">${esc(item.source || 'Academic calendar PDF')}</div></div></div>`).join('') : '<div class="evstatus">No upcoming CIA/MSE dates are listed in the calendar.</div>';
+                drawFacultyQueue(items);
+            },
+            async attendance() { if (!$('#ab').children.length) { [['Machine Learning', 39, 50], ['Deep Learning', 44, 50]].forEach(r => row(...r)) } calc() },
+            async class() { const t = $('#ct').value, d = await api('/class-attendance?target=' + t); $('#cb').innerHTML = d.map(r => `<tr><td>${esc(r.student)}</td><td>${r.attended}</td><td>${r.held}</td><td>${r.percent}%</td><td>${r.need ? `<span class="bad">needs ${r.need} in a row</span>` : '<span class="ok">on track</span>'}</td></tr>`).join('') },
+            async calendar() {
+                const c = await getCal(), types = [...new Set(c.map(e => e.type))]; if (!$('#cf').children.length) { $('#cf').innerHTML = types.map(t => `<button class="chip on" data-t="${t}">${t}</button>`).join(''); $('#cf').onclick = e => { const b = e.target.closest('.chip'); if (b) { b.classList.toggle('on'); draw() } } } draw();
+                function draw() { const on = $$('#cf .on').map(b => b.dataset.t); let m = '', h = ''; c.filter(e => on.includes(e.type)).forEach(e => { const k = new Date(e.start + 'T00:00').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }); if (k !== m) { m = k; h += `<div class="mh">${k}</div>` } h += `<div class="ev t-${e.type}"><div class="dt">${rng(e)}</div><div>${esc(e.title)}</div><span class="tag">${e.type}</span></div>` }); $('#ce').innerHTML = h }
+            },
+            async policies() { const q = $('#ps').value; const d = await api('/policies?q=' + encodeURIComponent(q)); $('#pl').innerHTML = d.map(p => `<div class="card"><h3>${esc(p.title)}</h3><div class="mut">${esc(p.source)} · p.${esc(p.page)} · ${esc(p.kind)}</div><p style="white-space:pre-wrap;margin:8px 0 0">${esc(p.text)}</p></div>`).join('') || '<div class="card mut">No passages match.</div>' },
+            async sources() { const d = await api('/sources'); $('#sl').innerHTML = d.map(s => `<div class="ev"><div style="flex:1"><b>${esc(s.source)}</b></div><span class="tag">${esc(s.kind)}</span><span class="tag">${s.chunks} passages</span></div>`).join('') },
+            async results() {
+                const r = await api('/results'); $('#rb').innerHTML = r.mock ? '<div class="bad" style="border-radius:10px;padding:10px 14px;margin:10px 0">MOCK / ILLUSTRATIVE numbers, not measured. Run evaluation/evaluate.py to replace them.</div>' : '<div class="ok" style="padding:8px 14px;margin:10px 0">Measured results from evaluation/evaluate.py</div>';
+                const rows = r.rows; if (!rows.length) { $('#rt').innerHTML = ''; return } const cols = Object.keys(rows[0]);
+                $('#rt').innerHTML = '<thead><tr>' + cols.map(c => `<th>${esc(c)}</th>`).join('') + '</tr></thead><tbody>' + rows.map(x => '<tr>' + cols.map(c => `<td>${esc(x[c] || '–')}</td>`).join('') + '</tr>').join('') + '</tbody>';
+                $('#rbars').innerHTML = '<h3>Accuracy by setup</h3>' + rows.map(x => `<div style="display:flex;align-items:center;gap:10px;margin:6px 0"><span style="width:90px">${esc(x.config)}</span><div style="flex:1;background:var(--pri2);border-radius:8px;height:22px"><div style="width:${(+x.accuracy || 0) * 100}%;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--pri),var(--gold))"></div></div><b>${Math.round((+x.accuracy || 0) * 100)}%</b></div>`).join('')
+            },
+            async admin() {
+                $('#feedbackState').textContent = 'Loading dashboard…';
+                const [s, l, d, feedback, status, system] = await Promise.all([api('/admin/stats'), api('/admin/logs?limit=40'), api('/admin/documents'), api('/admin/feedback?limit=500'), api('/admin/events-status'), api('/admin/system')]);
+                feedbackCache = feedback;
+                $('#at').innerHTML = [['questions', 'questions'], ['abstained', 'declined'], ['attendance_tool', 'attendance tool'], ['helpful', '👍'], ['not_helpful', '👎'], ['avg_latency_s', 'avg seconds']].map(k => `<div class="card tile"><b>${s[k[0]]}</b><span class="mut">${k[1]}</span></div>`).join('');
+                $('#au').innerHTML = s.unanswered.map(q => '• ' + esc(q)).join('<br>') || 'None yet'; $('#ud').innerHTML = d.map(x => `<span class="chip">${esc(x)}</span>`).join('');
+                $('#al').innerHTML = l.map(x => `<tr><td>${esc(x.username)}</td><td>${esc(x.question)}</td><td>${x.abstained ? '<span class="bad">declined</span>' : x.tool ? 'tool' : '<span class="ok">answered</span>'}</td><td>${x.rating === 1 ? 'Helpful' : x.rating === -1 ? 'Not helpful' : '–'}</td></tr>`).join('') || '<tr><td colspan="4">No chats yet.</td></tr>';
+                $('#feedbackRows').innerHTML = feedback.map(x => `<tr><td>${new Date(x.ts * 1000).toLocaleDateString()}</td><td>${esc(x.username)}</td><td>${x.rating === 1 ? 'Helpful' : 'Not helpful'}</td><td>${esc(x.comment || '')}</td></tr>`).join('');
+                $('#feedbackState').textContent = feedback.length ? `${feedback.length} feedback entries` : 'No feedback has been submitted yet.';
+                $('#eventRefreshStatus').textContent = status.state === 'complete' ? `Last refreshed ${new Date(status.last_finished * 1000).toLocaleString()} · ${status.events} records` : status.error ? `Refresh failed: ${status.error}` : `Refresh status: ${status.state}`;
+                $('#systemRows').innerHTML = [['API', system.api], ['Indexed chunks', system.chunks], ['Dense index', system.dense_index_present ? 'Available' : 'BM25 only'], ['Source PDFs', system.source_pdfs], ['Events', system.events], ['Faculty drafts', system.faculty_drafts], ['Nightly refresh', system.nightly_refresh_next ? new Date(system.nightly_refresh_next).toLocaleString() : 'Not scheduled']].map(([label, value]) => `<tr><th>${esc(label)}</th><td>${esc(value)}</td></tr>`).join('');
+            }
+        };
+        /* attendance rows */
+        function row(n = '', a = '', h = '') { const tr = document.createElement('tr'); tr.innerHTML = `<td><input class="s" value="${esc(n)}" placeholder="Subject"></td><td><input type="number" min="0" value="${a}"></td><td><input type="number" min="1" value="${h}"></td><td class="n">–</td><td class="stt">–</td>`; $('#ab').appendChild(tr); tr.oninput = calc }
+        async function calc() {
+            const t = +$('#tg').value; for (const tr of $$('#ab tr')) {
+                const [, a, h] = [...tr.querySelectorAll('input')].map(i => +i.value), n = tr.querySelector('.n'), s = tr.querySelector(".stt");
+                if (!(h > 0) || a > h || a < 0) { n.textContent = '–'; s.textContent = 'Check the numbers'; continue }
+                try { const r = await api('/attendance/calc', { json: { attended: a, held: h, target: t } }); n.textContent = r.percent + '%'; s.innerHTML = r.need ? `<span class="bad">attend ${r.need} in a row</span>` : `<span class="ok">can miss ${r.can_miss}</span>` } catch (e) { s.textContent = e.message }
+            }
+        }
+        $('#add').onclick = () => row(); $('#tg').onchange = calc; $('#ct').onchange = () => LOAD.class();
+        $('#refreshEvents').onclick = async () => {
+            const button = $('#refreshEvents'); button.disabled = true; $('#eventRefreshStatus').textContent = 'Queueing public scrape and re-index…';
+            try {
+                await api('/admin/refresh-events?reindex=true', { method: 'POST' });
+                refreshEventStatus();
+            } catch (error) { $('#eventRefreshStatus').textContent = 'Refresh could not start: ' + error.message; button.disabled = false }
+        };
+        async function refreshEventStatus() {
+            try {
+                const state = await api('/admin/events-status');
+                $('#eventRefreshStatus').textContent = state.state === 'complete' ? `Last refreshed ${new Date(state.last_finished * 1000).toLocaleString()} · ${state.events} records` : state.error ? `Refresh failed: ${state.error}` : `Refresh status: ${state.state}`;
+                if (state.state === 'queued' || state.state === 'running') setTimeout(refreshEventStatus, 2000);
+                else { $('#refreshEvents').disabled = false; if (state.state === 'complete') { cal = null; await loadEvents() } }
+            } catch (error) { $('#eventRefreshStatus').textContent = error.message; $('#refreshEvents').disabled = false }
+        }
+        $('#exportFeedback').onclick = () => {
+            const quote = value => `"${String(value ?? '').replace(/"/g, '""')}"`;
+            const rows = [['timestamp', 'username', 'chat_id', 'rating', 'comment'], ...feedbackCache.map(x => [new Date(x.ts * 1000).toISOString(), x.username, x.chat_id, x.rating, x.comment])];
+            const blob = new Blob([rows.map(row => row.map(quote).join(',')).join('\r\n')], { type: 'text/csv;charset=utf-8' });
+            const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'campusgpt-feedback.csv'; link.click(); URL.revokeObjectURL(link.href);
+        };
+        let pt; $('#ps').oninput = () => { clearTimeout(pt); pt = setTimeout(() => LOAD.policies(), 250) };
+        $('#studioSample').onclick = () => {
+            $('#si').value = 'Course: Introduction to Data Literacy (synthetic demo)\n\nUnit 1: Data types, tables, and responsible collection\nUnit 2: Descriptive statistics and visual summaries\nUnit 3: Sampling, bias, and interpreting evidence\nUnit 4: Communicating findings with clear charts\n\nAssessment: short concept checks, one chart critique, and a final mini-project using fictional public transport data.';
+            toast('Synthetic demo notes loaded');
+        };
+        $('#sg').onclick = async () => { const b = $('#sg'); b.disabled = true; $('#so').textContent = 'Generating…'; try { $('#so').textContent = (await api('/studio', { json: { task: $('#st').value, text: $('#si').value } })).output } catch (e) { $('#so').innerHTML = '<span class="bad">' + esc(e.message) + '. Check LLM_BACKEND and GROQ_API_KEY in .env.</span>' } b.disabled = false };
+        $('#dg').onclick = async () => {
+            const f = $('#df').files[0]; if (!f || !$('#dq').value) return toast('Choose a file and type a question'); const fd = new FormData(); fd.append('file', f); fd.append('question', $('#dq').value);
+            $('#do').textContent = 'Reading…'; try { const r = await api('/documents/ask', { method: 'POST', body: fd }); $('#do').innerHTML = `<div class="m b" style="margin-left:0;max-width:100%">${fmt(r.answer)}</div>` + r.passages.map(p => `<details style="margin-top:8px"><summary>Passage ${p.chunk}</summary><p style="white-space:pre-wrap">${esc(p.text)}</p></details>`).join('') } catch (e) { $('#do').innerHTML = '<span class="bad">' + esc(e.message) + '</span>' }
+        };
+        $('#ug').onclick = async () => {
+            const f = $('#uf').files[0]; if (!f) return toast('Choose a PDF'); const fd = new FormData(); fd.append('file', f); $('#um').textContent = 'Uploading…';
+            try { const r = await api('/admin/upload', { method: 'POST', body: fd }); $('#um').textContent = 'Saved ' + r.saved + '. Re-indexing in the background; refresh in a minute.' } catch (e) { $('#um').textContent = e.message }
+        };
+        if (T && U) start();
+
+    </script>
+</body>
+
+</html>

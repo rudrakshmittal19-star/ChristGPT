@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "API (FastAPI)", "type": "debugpy", "request": "launch", "module": "uvicorn",
+      "args": ["campusgpt.api:app", "--reload", "--port", "8000"], "envFile": "${workspaceFolder}/.env" },
+    { "name": "Streamlit UI", "type": "debugpy", "request": "launch", "module": "streamlit",
+      "args": ["run", "frontend/streamlit_app.py"], "envFile": "${workspaceFolder}/.env" },
+    { "name": "Ingest PDFs", "type": "debugpy", "request": "launch", "module": "campusgpt.ingest" },
+    { "name": "Build vector index", "type": "debugpy", "request": "launch", "module": "campusgpt.index" },
+    { "name": "Make QA dataset", "type": "debugpy", "request": "launch", "module": "training.make_qa_dataset",
+      "args": ["--n", "60"], "envFile": "${workspaceFolder}/.env" },
+    { "name": "Train QLoRA (GPU)", "type": "debugpy", "request": "launch", "module": "training.train_qlora" },
+    { "name": "Evaluate", "type": "debugpy", "request": "launch", "module": "evaluation.evaluate",
+      "args": ["--configs", "base,base+rag", "--gen-backend", "anthropic", "--judge"], "envFile": "${workspaceFolder}/.env" }
+  ]
+}

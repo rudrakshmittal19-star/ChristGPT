@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "1. Setup venv + install", "type": "shell",
+      "command": "python -m venv .venv && .venv/bin/pip install -r requirements.txt", "windows": { "command": "python -m venv .venv; .venv\\Scripts\\pip install -r requirements.txt" } },
+    { "label": "2. Ingest PDFs", "type": "shell", "command": "python -m campusgpt.ingest" },
+    { "label": "3. Build vector index", "type": "shell", "command": "python -m campusgpt.index" },
+    { "label": "4. Run API", "type": "shell", "command": "uvicorn campusgpt.api:app --reload --port 8000" },
+    { "label": "5. Run Streamlit", "type": "shell", "command": "streamlit run frontend/streamlit_app.py" },
+    { "label": "Run tests", "type": "shell", "command": "python -m pytest -q tests", "group": "test" }
+  ]
+}

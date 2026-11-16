@@ -1,0 +1,11 @@
+.venv/
+.vercel/
+__pycache__/
+*.pyc
+.env
+index/
+training/outputs/
+data/processed/
+.pytest_cache/
+.ipynb_checkpoints/
+data/campusgpt.db
