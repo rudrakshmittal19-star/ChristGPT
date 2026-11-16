@@ -1,6 +1,5 @@
 .venv
 index
-data/raw
 data/mock
 training
 evaluation
@@ -8,4 +7,3 @@ tests
 scripts
 *.zip
 frontend/streamlit_app.py
-frontend/standalone_demo.html

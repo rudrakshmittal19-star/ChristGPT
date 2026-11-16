@@ -7,5 +7,3 @@ dependencies = [
   "rank-bm25>=0.2.2", "numpy>=1.26", "openai>=1.40", "python-dotenv>=1.0",
 ]
 
-[tool.vercel]
-entrypoint = "campusgpt.api:app"
